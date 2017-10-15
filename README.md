@@ -1,11 +1,11 @@
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/AWS_logo_PMS_300x180.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_available.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_ingergration.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_ecryption-lock.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_fully-managed.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_lowcost-affordable.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_performance.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_scalable.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_storage.png)
 # **Amazon Elastic File System (Amazon EFS)**
 
-## Burst Credit Notifications
+## Burst Credit Balance Notifications
 
-### Version 1.0.1
+### Version 1.0.0
 
-efs-pt-1.0.1
+efs-bcbn-1.0.0
 
 ---
 
@@ -15,9 +15,13 @@ Errors or corrections? Email us at [darrylo@amazon.com](mailto:darrylo@amazon.co
 
 ---
 
-## Tutorial Overview
-
 ### Overview
+
+This AWS Cloudformation template will create AWS resources to monitor and send notifications if the burst credit balance of the specified Amazon EFS file system has dropped below predefined thresholds.
+
+Throughput on Amazon EFS scales as a file system grows. Because file-based workloads are typically spiky—driving high levels of throughput for short periods of time, and low levels of throughput the rest of the time—Amazon EFS is designed to burst to high throughput levels for periods of time. Amazon EFS uses a credit system to determine when file systems can burst. Each file system earns credits over time at a baseline rate that is determined by the size of the file system, and uses credits whenever it reads or writes data. The baseline rate is 50 MiB/s per TiB of storage (equivalently, 50 KiB/s per GiB of storage). Accumulated burst credits give the file system permission to drive throughput above its baseline rate. When a file system has a positive burst credit balance, it can burst. The burst rate is 100 MiB/s per TiB of storage (equivalently, 100 KiB/s per GiB of storage).
+
+If your workload accessing a file system relies on burst throughput for normal operations, monitoring the file system's burst credit balance is essential. This AWS CloudFormation template will create two Amazon CloudWatch alarms that will send email notifications if the burst credit balance drops below a level where if the file system was being driven at the highest throughput rate possible (permitted throughput), then the burst credit balance would drop to zero in x number of minutes. These minute variables input parameters in the Cloudformation template. One alarm and notification is identified as a 'Warning' and has a default value of 180 minutes. This means that a CloudWatch alarm will send an email notification 180 minutes before the credit balance drops to zero, based on the latest permitted throughput rate. The second alarm and notification is a 'Critical' notification and has a default value of 60 minutes. This alarm will send an email notification 60 minutes before the credit balance drops to zero, based on the latest permitted throughput rate. Permitted throughput is dynamic, scaling up as the file systems grows and scaling down as the file system shrinks. Therefore a third alarm is create that monitors permitted throughput. If the permitted throughput increases by 10%, an email notification is sent and an Auto Scaling Group will launch an EC2 instance that dynamically resets the 'Warning' and 'Critical' alarm burst credit balance thresholds based on the latest permitted throughput rate. This EC2 instance will auto terminate and a new instance will launch only when the permitted throughput rate increases 10%.
 
 This tutorial is designed to help you better understand the performance characteristics of Amazon Elastic File System (Amazon EFS) and how parallelism, I/O size, and Amazon EC2 instance types have a profound effect on file system performance.
 
@@ -31,23 +35,9 @@ This tutorial is divided into four sections.
 
 The AWS CloudFormation template below will create the compute environment you need to run the tutorial. You must have an existing Amazon EFS file system in the region where you launch the CloudFormation stack and it must have mount targets in the VPC where you launch your EC2 instances. You will need to provide the EFS file system id as a parameter value when you launch the CloudFormation stack.
 
-### The Environment
-
-The AWS CloudFormation template will launch three EC2 instances, each in their own Auto Scaling group. Please use the recommended default instance types for each Auto Scaling group. The file system, whose id you entered as a CloudFormation parameter, will be automatically mounted to each EC2 instance. These instances will also have a 20 GB gp2 EBS data volume mounted and 5GB of test data will be generated on that volume. The following open-source applications will also be installed on each instance.
->**nload** - is a console application that monitors network traffic and bandwidth usage in real time
-**smallfile** - [https://github.com/bengland2/smallfile](https://github.com/bengland2/smallfile) - used to generate test data; Developer: Ben England
-**GNU Parallel** - [https://www.gnu.org/software/parallel/](https://www.gnu.org/software/parallel/) - used to parallelize single-threaded commands; O. Tange (2011): GNU Parallel - The Command-Line Power Tool, ;login: The USENIX Magazine, February 2011:42-47
-**Mutil *mcp*** - [https://github.com/pkolano/mutil](https://github.com/pkolano/mutil) - multi-threaded drop-in replacement of cp; Author Paul Kolano (NASA)
-**fpart** - [https://github.com/martymac/fpart](https://github.com/martymac/fpart) - sorts file trees and packs them into partitions; Author Ganaël Laplanche
-**fpsync** - wraps fpart + rsync together as a multi-threaded transfer utility - included in the tools/ directory of fpart
-
-NOTICE!! Amazon Web Services does NOT endorse specific 3rd party applications. These software packages are used for demonstration purposes only.  Follow all expressed or implied license agreements associated with these 3rd party software products.
-
-WARNING!! This tutorial environment will exceed your free-usage tier. You will incur charges as a result of launching this CloudFormation stack and executing the scripts included in this tutorial. This tutorial will take approximately 1 hour to complete and at a cost of ~$0.83. Delete all files on the EFS file system that were created during this tutorial and delete the CloudFormation stack so you don’t continue to incur additional compute and storage charges.
-
 ### Launch the AWS CloudFormation Stack
 
-Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png) link below to create the AWS CloudFormation stack in your account and desired AWS region. This region must an existing Amazon EFS file system which you will use with this tutorial.
+Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png) link below to create the AWS CloudFormation stack in your account and desired AWS region.
 
 | AWS Region Code | Name | Launch |
 | --- | --- | --- 
@@ -58,7 +48,7 @@ Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1
 | eu-central-1 |EU (Frankfurt)| [![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=efs-performance-tutorial&templateURL=https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-performance-tutorial-20170927.yaml) |
 | ap-southeast-2 |AP (Sydney)| [![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/new?stackName=efs-performance-tutorial&templateURL=https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-performance-tutorial-20170927.yaml) |
 
-After launching the AWS CloudFormation Stack above, you should see three Amazon EC2 instances running in your VPC.  Each instance **Name** tag will change from "EFS Performance Tutorial - Launching..." to "EFS Performance Tutorial - Ready". Wait for the **Name** tag of each instance to read "EFS Performance Tutorial - Ready" before continuing.
+There are 
 
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-performance-tutorial-ec2-console-screenshot.png)
 
