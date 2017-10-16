@@ -25,7 +25,7 @@ If a workload accessing a file system relies on the burst throughput for normal 
 
 ### Prerequisites
 
-You must have an existing Amazon EFS file system in the region where you launch the CloudFormation stack. You must also have an email address, an existing VPC security group, EC2 key-pair, and at least one VPC subnet.
+You must have an existing Amazon EFS file system in the region where you launch the CloudFormation stack. You must also have an email address, an existing VPC security group, EC2 key-pair, and at least one VPC public subnet.
 
 ### Launch the AWS CloudFormation Stack
 
