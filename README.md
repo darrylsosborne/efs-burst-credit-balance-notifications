@@ -45,45 +45,45 @@ Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1
  ___
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit-balance-notifications-screenshot.png)
  ___
-##### Stack name
+#### Stack name
 
 The name of the AWS Cloudformation stack. This must be unique and its recommended that you append a short GUID suffix to keep each iteration of this stack unique. The stack name is used in the name of the SNS topic and CloudWatch alarms.
 
-##### Amazon EFS File System Id
+#### Amazon EFS File System Id
 
 The Amazon EFS file system id of the file system you want to monitor.
 
-##### Burst Credit Balance 'Warning' Threshold (Minutes)
+#### Burst Credit Balance 'Warning' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Warning' email notification will be send.
 
-##### Burst Credit Balance 'Critical' Threshold (Minutes)
+#### Burst Credit Balance 'Critical' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Critical' email notification will be send.
 
-##### SNS Email Address
+#### SNS Email Address
 
 The email address that will receive the 'Warning' and 'Critical' notifications.
 
-##### Existing Key Pair (optional)
+#### Existing Key Pair (optional)
 
 The EC2 key-pair attached to the EC2 instance that will automatically launch in an Auto Scaling group to reset the burst credit balance alarm threshold values.
 
-##### Instance Type
+#### Instance Type
 
 The EC2 instance type that will be launched in an Auto Scaling group to reset the burst credit balance alarm threshold values.
 
-##### Subnet for AZ 0
+#### Subnet for AZ 0
 
-A VPC subnet for the Auto Scaling group.
+A VPC public subnet for the Auto Scaling group.
 
-##### Subnet for AZ 1
+#### Subnet for AZ 1
 
-A VPC subnet for the Auto Scaling group.
+A VPC public subnet for the Auto Scaling group.
 
-##### Subnet for AZ 2
+#### Subnet for AZ 2
 
-A VPC subnet for the Auto Scaling group.
+A VPC public subnet for the Auto Scaling group.
 
 
 
