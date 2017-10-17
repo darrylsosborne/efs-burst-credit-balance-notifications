@@ -120,7 +120,9 @@ A VPC public subnet for the Auto Scaling group.
 ### SNS Topic w/ the email address subscribed
 
 One SNS topic and subscription that receives all SNS notifications.
+
 Naming convention: {file-system-id}-notifications-{cloudformation-stack-name}
+
 ```example: fs-26e6418e-notifications-efs-burst-credit-balance-notifications-6ECABFA1```
 
 ### CloudWatch Alarms
@@ -128,19 +130,27 @@ Naming convention: {file-system-id}-notifications-{cloudformation-stack-name}
 Four CloudWatch alarms.
 
 One 'Warning' alarm that alerts when the burst credit balance drops below the 'warning' threshold for 5 minutes.
+
 Naming convention: {file-system-id} burst credit balance - Warning - {cloudformation-stack-name}
+
 ```example: fs-26e6418e burst credit balance - Warning - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One 'Critical' alarm that alerts when the burst credit balance drops below the 'critical' threshold for 5 minutes.
+
 Naming convention: {file-system-id} burst credit balance - Warning - {cloudformation-stack-name}
+
 ```example: fs-26e6418e burst credit balance - Critical - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One burst credit balance increase threshold alarm that alerts when the permitted throughput increases by 10% for 5 minutes.
+
 Naming convention: {file-system-id} burst credit balance increase threshold - {cloudformation-stack-name}
+
 ```example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One burst credit balance decrease threshold alarm that alerts when the permitted throughput decreases by 10% for 5 minutes.
+
 Naming convention: {file-system-id} burst credit balance decrease threshold - {cloudformation-stack-name}
+
 ```example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1```
 
 ### VPC Security Group
@@ -153,13 +163,14 @@ One new security group is created in the VPC. This security group is locked down
 
 One IAM policy and EC2 instance profile attached to the auto scaling launch configuration. This grants API permissions for the script to run.
 
->Allows: cloudwatch:GetMetricStatistics
-         cloudwatch:PutMetricAlarm
-         autoscaling:DescribeAutoScalingGroups
-         autoscaling:DescribeAutoScalingInstances
-         autoscaling:UpdateAutoScalingGroup
-         elasticfilesystem:DescribeFileSystems
-         sns:Publish
+Allows:
+>cloudwatch:GetMetricStatistics
+cloudwatch:PutMetricAlarm
+autoscaling:DescribeAutoScalingGroups
+autoscaling:DescribeAutoScalingInstances
+autoscaling:UpdateAutoScalingGroup
+elasticfilesystem:DescribeFileSystems
+sns:Publish
 
 ```Policy name: efs-burst-credit-balance-cloudwatch-alarms```
 
