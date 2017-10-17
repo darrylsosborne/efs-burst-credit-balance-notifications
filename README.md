@@ -27,10 +27,10 @@ If a workload accessing a file system relies on the burst throughput for normal 
 
 You must have an existing Amazon EFS file system in the region where you launch the CloudFormation stack. You must also have an email address, an existing VPC, and at least one VPC subnet with Internet access (for AWS API calls).
 
-### Steps to create Amazon EFS Burst Credit Balance Notifications
+## Steps to create Amazon EFS Burst Credit Balance Notifications
 
 
-### Launch the AWS CloudFormation Stack
+### 1) Launch the AWS CloudFormation Stack
 
 Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png) link below to create the AWS CloudFormation stack in your account and desired AWS region.
 
@@ -43,87 +43,87 @@ Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1
 | eu-central-1 |EU (Frankfurt)| [![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png)](https://console.aws.amazon.com/cloudformation/home?region=eu-central-1#/stacks/new?stackName=efs-burst-credit-balance-notifications&templateURL=https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit_balance-cloudwatch-alarms.yaml) |
 | ap-southeast-2 |AP (Sydney)| [![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1/tutorial/deploy_to_aws_20171004_v2.png)](https://console.aws.amazon.com/cloudformation/home?region=ap-southeast-2#/stacks/new?stackName=efs-burst-credit-balance-notifications&templateURL=https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit_balance-cloudwatch-alarms.yaml) |
 
-### Confirm SNS subscription
+### 2) Confirm SNS subscription
 
 The email address entered as an input parameter will automatically be subscribed to the SNS topic and will receive an 'AWS Notification - Subscription Confirmation' email. Click on the 'Confirm subscription' link in the email.
 
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit-balance-notifications-confirm-subscription.png.png)
 
-### Verify CloudWatch alarms have been created
+### 3) Verify CloudWatch alarms have been created
 
 Verify all four CloudWatch alarms have been created. See the AWS Resources section below for the alarm names.
 
-### Verify the EC2 instance terminates after a few minutes
+### 4) Verify the EC2 instance terminates after a few minutes
 
 The EC2 instance will automatically terminate once the script runs that calcualtes the burst credit balance thresholds.
 
-### Parameters
+## Parameters
  ___
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit-balance-notifications-screenshot.png)
  ___
-#### Stack name
+### Stack name
 
 The name of the AWS Cloudformation stack. This must be unique and its recommended that you append a short GUID suffix to keep each iteration of this stack unique. The stack name is used in the name of the SNS topic and CloudWatch alarms.
 
 example: efs-burst-credit-balance-notifications-6ECABFA1
 
-#### Amazon EFS File System Id
+### Amazon EFS File System Id
 
 The Amazon EFS file system id of the file system you want to monitor.
 
 example: fs-26e6418e
 
-#### Burst Credit Balance 'Warning' Threshold (Minutes)
+### Burst Credit Balance 'Warning' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Warning' email notification will be send. Default is 180 minutes (3 hours).
 
 example: 180
 
-#### Burst Credit Balance 'Critical' Threshold (Minutes)
+### Burst Credit Balance 'Critical' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Critical' email notification will be send. Default is 60 minutes (1 hour).
 
 example: 60
 
-#### SNS Email Address
+### SNS Email Address
 
 The email address that will receive the 'Warning' and 'Critical' notifications.
 
 example: darrylo@amazon.com
 
-#### Instance Type
+### Instance Type
 
 The EC2 instance type launched in an Auto Scaling group that runs a script to reset the burst credit balance alarm threshold values. Default is t2.nano.
 
 example: t2.nano
 
-#### Subnet for AZ 0
+### Subnet for AZ 0
 
 A VPC public subnet for the Auto Scaling group.
 
 example: subnet-ab123dc4
 
-#### Subnet for AZ 1
+### Subnet for AZ 1
 
 A VPC public subnet for the Auto Scaling group.
 
 example: subnet-ab123dc5
 
-#### Subnet for AZ 2
+### Subnet for AZ 2
 
 A VPC public subnet for the Auto Scaling group.
 
 example: subnet-ab123dc6
 
-### AWS Resources Created
+## AWS Resources Created
 
-#### SNS Topic w/ the email address subscribed
+### SNS Topic w/ the email address subscribed
 
 One SNS topic and subscription that receives all SNS notifications.
 Naming convention: {file-system-id}-notifications-{cloudformation-stack-name}
 Example: fs-26e6418e-notifications-efs-burst-credit-balance-notifications-6ECABFA1
 
-#### CloudWatch Alarms
+### CloudWatch Alarms
 
 Four CloudWatch alarms.
 
@@ -143,13 +143,13 @@ One burst credit balance decrease threshold alarm that alerts when the permitted
 Naming convention: {file-system-id} burst credit balance decrease threshold - {cloudformation-stack-name}
 Example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1
 
-#### VPC Security Group
+### VPC Security Group
 
 One new security group is created in the VPC. This security group is locked down and has no inbound rules defined.
 
 Security group description: No inbound access security group
 
-#### IAM Policy & EC2 Instance Profile
+### IAM Policy & EC2 Instance Profile
 
 One IAM policy and EC2 instance profile attached to the auto scaling launch configuration. This grants API permissions for the script to run.
 
@@ -163,7 +163,7 @@ Allows: cloudwatch:GetMetricStatistics
 
 Policy name: efs-burst-credit-balance-cloudwatch-alarms
 
-#### Auto Scaling Group & Launch Configuration
+### Auto Scaling Group & Launch Configuration
 
 One auto scaling group and launch configuration to launch and EC2 instance that runs a script to calculate the burst credit balance thresholds.
 
@@ -171,7 +171,7 @@ The auto scaling group will have a maximum size of 1, a desired size of 1, and a
 
 The launch configuration will launch instances with no EC2 key-pair and the security group created above. A script is dynamically generated in the /tmp directory. This script will run at boot-time and will calculate the burst credit balance thresholds.
 
-### Troubleshooting
+## Troubleshooting
 
 
 For feedback, suggestions, or corrections, please email me at [darrylo@amazon.com](mailto:darrylo@amazon.com).
