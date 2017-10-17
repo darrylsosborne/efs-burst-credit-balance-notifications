@@ -45,9 +45,9 @@ Click the  ![cloudformation-launch-stack](https://s3.amazonaws.com/aws-us-east-1
 
 ### 2) Confirm SNS subscription
 
-The email address entered as an input parameter will automatically be subscribed to the SNS topic and will receive an 'AWS Notification - Subscription Confirmation' email. Click on the 'Confirm subscription' link in the email.
+The email address entered as an input parameter will automatically be subscribed to the SNS topic and will receive an **AWS Notification - Subscription Confirmation email**. Click on the ***Confirm subscription*** link in the email.
 
-![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit-balance-notifications-confirm-subscription.png.png)
+![](https://s3.amazonaws.com/aws-us-east-1/tutorial/efs-burst-credit-balance-notifications-confirm-subscription.png)
 
 ### 3) Verify CloudWatch alarms have been created
 
@@ -65,55 +65,55 @@ The EC2 instance will automatically terminate once the script runs that calcualt
 
 The name of the AWS Cloudformation stack. This must be unique and its recommended that you append a short GUID suffix to keep each iteration of this stack unique. The stack name is used in the name of the SNS topic and CloudWatch alarms.
 
-example: efs-burst-credit-balance-notifications-6ECABFA1
+```example: efs-burst-credit-balance-notifications-6ECABFA1```
 
 ### Amazon EFS File System Id
 
 The Amazon EFS file system id of the file system you want to monitor.
 
-example: fs-26e6418e
+```example: fs-26e6418e```
 
 ### Burst Credit Balance 'Warning' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Warning' email notification will be send. Default is 180 minutes (3 hours).
 
-example: 180
+```example: 180```
 
 ### Burst Credit Balance 'Critical' Threshold (Minutes)
 
 The number of minutes before the burst credit balance drops to zero, based on the latest permitted throughput rate. This is when the 'Critical' email notification will be send. Default is 60 minutes (1 hour).
 
-example: 60
+```example: 60```
 
 ### SNS Email Address
 
 The email address that will receive the 'Warning' and 'Critical' notifications.
 
-example: darrylo@amazon.com
+```example: darrylo@amazon.com```
 
 ### Instance Type
 
 The EC2 instance type launched in an Auto Scaling group that runs a script to reset the burst credit balance alarm threshold values. Default is t2.nano.
 
-example: t2.nano
+```example: t2.nano```
 
 ### Subnet for AZ 0
 
 A VPC public subnet for the Auto Scaling group.
 
-example: subnet-ab123dc4
+```example: subnet-ab123dc4```
 
 ### Subnet for AZ 1
 
 A VPC public subnet for the Auto Scaling group.
 
-example: subnet-ab123dc5
+```example: subnet-ab123dc5```
 
 ### Subnet for AZ 2
 
 A VPC public subnet for the Auto Scaling group.
 
-example: subnet-ab123dc6
+```example: subnet-ab123dc6```
 
 ## AWS Resources Created
 
@@ -121,7 +121,7 @@ example: subnet-ab123dc6
 
 One SNS topic and subscription that receives all SNS notifications.
 Naming convention: {file-system-id}-notifications-{cloudformation-stack-name}
-Example: fs-26e6418e-notifications-efs-burst-credit-balance-notifications-6ECABFA1
+```example: fs-26e6418e-notifications-efs-burst-credit-balance-notifications-6ECABFA1```
 
 ### CloudWatch Alarms
 
@@ -129,39 +129,39 @@ Four CloudWatch alarms.
 
 One 'Warning' alarm that alerts when the burst credit balance drops below the 'warning' threshold for 5 minutes.
 Naming convention: {file-system-id} burst credit balance - Warning - {cloudformation-stack-name}
-Example: fs-26e6418e burst credit balance - Warning - efs-burst-credit-balance-notifications-6ECABFA1
+```example: fs-26e6418e burst credit balance - Warning - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One 'Critical' alarm that alerts when the burst credit balance drops below the 'critical' threshold for 5 minutes.
 Naming convention: {file-system-id} burst credit balance - Warning - {cloudformation-stack-name}
-Example: fs-26e6418e burst credit balance - Critical - efs-burst-credit-balance-notifications-6ECABFA1
+```example: fs-26e6418e burst credit balance - Critical - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One burst credit balance increase threshold alarm that alerts when the permitted throughput increases by 10% for 5 minutes.
 Naming convention: {file-system-id} burst credit balance increase threshold - {cloudformation-stack-name}
-Example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1
+```example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1```
 
 One burst credit balance decrease threshold alarm that alerts when the permitted throughput decreases by 10% for 5 minutes.
 Naming convention: {file-system-id} burst credit balance decrease threshold - {cloudformation-stack-name}
-Example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1
+```example: fs-26e6418e burst credit balance increase threshold - efs-burst-credit-balance-notifications-6ECABFA1```
 
 ### VPC Security Group
 
 One new security group is created in the VPC. This security group is locked down and has no inbound rules defined.
 
-Security group description: No inbound access security group
+```Security group description: No inbound access security group```
 
 ### IAM Policy & EC2 Instance Profile
 
 One IAM policy and EC2 instance profile attached to the auto scaling launch configuration. This grants API permissions for the script to run.
 
-Allows: cloudwatch:GetMetricStatistics
-        cloudwatch:PutMetricAlarm
-        autoscaling:DescribeAutoScalingGroups
-        autoscaling:DescribeAutoScalingInstances
-        autoscaling:UpdateAutoScalingGroup
-        elasticfilesystem:DescribeFileSystems
-        sns:Publish
+>Allows: cloudwatch:GetMetricStatistics
+         cloudwatch:PutMetricAlarm
+         autoscaling:DescribeAutoScalingGroups
+         autoscaling:DescribeAutoScalingInstances
+         autoscaling:UpdateAutoScalingGroup
+         elasticfilesystem:DescribeFileSystems
+         sns:Publish
 
-Policy name: efs-burst-credit-balance-cloudwatch-alarms
+```Policy name: efs-burst-credit-balance-cloudwatch-alarms```
 
 ### Auto Scaling Group & Launch Configuration
 
