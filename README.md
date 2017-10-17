@@ -1,4 +1,5 @@
 ![](https://s3.amazonaws.com/aws-us-east-1/tutorial/AWS_logo_PMS_300x180.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_available.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_ingergration.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_ecryption-lock.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_fully-managed.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_lowcost-affordable.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_performance.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_scalable.png)![](https://s3.amazonaws.com/aws-us-east-1/tutorial/100x100_benefit_storage.png)
+
 # **Amazon Elastic File System (Amazon EFS)**
 
 ## Burst Credit Balance Notifications
@@ -163,7 +164,7 @@ One new security group is created in the VPC. This security group is locked down
 
 One IAM policy and EC2 instance profile attached to the auto scaling launch configuration. This grants API permissions for the script to run.
 
->| Allows |
+| Allows |
 | --- |
 | cloudwatch:GetMetricStatistics |
 | cloudwatch:PutMetricAlarm |
