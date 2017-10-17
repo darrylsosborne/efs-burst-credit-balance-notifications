@@ -26,7 +26,7 @@ If a workload accessing a file system relies on the burst throughput for normal 
 
 | Warning Alarm | Critical Alarm | Permitted Throughput Increase | Permitted Throughput Decrease |
 | --- | --- | --- | ---
-| ![burst-credit-balance-warning]https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png |  ![burst-credit-balance-warning]https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png |  ![burst-credit-balance-warning]https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png |  ![burst-credit-balance-warning]https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png |
+| ![burst-credit-balance-warning](https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png) |  ![burst-credit-balance-warning](https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png) |  ![burst-credit-balance-warning](https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png) |  ![burst-credit-balance-warning](https://s3.amazonaws.com/aws-us-east-1/tutorial/burst-credit-balance-warning-screenshot.png) |
 
 ### Prerequisites
 
